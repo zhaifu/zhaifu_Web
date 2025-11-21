@@ -26,13 +26,18 @@ export const Avatar: React.FC<AvatarProps> = ({ title, url, settings, className 
   
   const shapeClass = 
     settings.iconShape === 'circle' ? 'rounded-full' : 
-    settings.iconShape === 'rounded' ? 'rounded-xl' : 
+    settings.iconShape === 'rounded' ? 'rounded-lg md:rounded-xl' : 
     'rounded-none';
 
   // 当 URL 变化时重置错误状态，重新尝试加载图片
   useEffect(() => {
     setHasError(false);
   }, [url]);
+
+  // 响应式尺寸类名：移动端 w-9(36px)，桌面端 w-12(48px)
+  const sizeClasses = "w-9 h-9 md:w-12 md:h-12";
+  // 响应式字体大小：移动端小字体，桌面端大字体
+  const textClasses = "text-sm md:text-xl";
 
   // 1. 如果图片加载失败，显示文字头像 (Fallback)
   if (hasError) {
@@ -42,7 +47,7 @@ export const Avatar: React.FC<AvatarProps> = ({ title, url, settings, className 
 
     return (
       <div 
-        className={`shrink-0 flex items-center justify-center text-white font-bold text-xl shadow-sm select-none transition-all duration-300 w-12 h-12 ${shapeClass} ${className}`}
+        className={`shrink-0 flex items-center justify-center text-white font-bold shadow-sm select-none transition-all duration-300 ${sizeClasses} ${shapeClass} ${textClasses} ${className}`}
         style={{ 
           backgroundColor: bgColor,
           textShadow: '0 1px 2px rgba(0,0,0,0.15)',
@@ -57,7 +62,7 @@ export const Avatar: React.FC<AvatarProps> = ({ title, url, settings, className 
   // 2. 默认：显示 Favicon 图片
   // 不渲染底层的文字头像，确保加载过程中没有文字闪烁
   return (
-    <div className={`relative shrink-0 w-12 h-12 bg-gray-100/10 dark:bg-white/5 ${shapeClass} ${className}`}>
+    <div className={`relative shrink-0 bg-gray-100/10 dark:bg-white/5 ${sizeClasses} ${shapeClass} ${className}`}>
       <img 
         src={faviconUrl}
         alt={title}

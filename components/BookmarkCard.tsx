@@ -45,16 +45,18 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, settings, 
       href={bookmark.url}
       target="_blank" 
       rel="noopener noreferrer"
-      className={`group relative flex items-center p-3 transition-all duration-300 ease-out ${cardBgClass} ${settings.iconShape === 'rounded' ? 'rounded-xl' : settings.iconShape === 'circle' ? 'rounded-2xl' : 'rounded-sm'}`}
+      // Mobile: p-2.5, Desktop: p-3
+      className={`group relative flex items-center p-2.5 md:p-3 transition-all duration-300 ease-out ${cardBgClass} ${settings.iconShape === 'rounded' ? 'rounded-lg md:rounded-xl' : settings.iconShape === 'circle' ? 'rounded-xl md:rounded-2xl' : 'rounded-md md:rounded-sm'}`}
     >
-      <div className="flex-shrink-0 mr-3">
+      {/* Mobile: mr-2.5, Desktop: mr-3 */}
+      <div className="flex-shrink-0 mr-2.5 md:mr-3">
         <Avatar title={bookmark.title} url={bookmark.url} settings={settings} />
       </div>
-      <div className="flex-1 min-w-0 pr-8">
+      <div className="flex-1 min-w-0 pr-4 md:pr-8">
         <h4 className={`text-sm font-medium truncate transition-colors duration-300 ${titleClass} group-hover:translate-x-0.5 transition-transform`}>
           {bookmark.title}
         </h4>
-        <p className={`text-xs truncate mt-0.5 opacity-70 transition-colors duration-300 ${textClass}`}>
+        <p className={`text-[10px] md:text-xs truncate mt-0.5 opacity-70 transition-colors duration-300 ${textClass}`}>
           {new URL(bookmark.url).hostname.replace('www.', '')}
         </p>
       </div>
@@ -63,7 +65,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, settings, 
       {onDelete && (
         <button
             onClick={handleDelete}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-500/20 hover:text-red-500 text-gray-400 dark:text-white/60 z-10"
+            className="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 p-1.5 md:p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-500/20 hover:text-red-500 text-gray-400 dark:text-white/60 z-10"
             title="删除"
         >
             <Trash2 size={16} />

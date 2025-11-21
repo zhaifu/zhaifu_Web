@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from 'react';
 import { X, Upload, Download, Circle, Square, Image as ImageIcon, Palette, Moon, Sun, Monitor, Check, Globe, Trash2, Plus, FileText, FolderPlus } from 'lucide-react';
 import { AppSettings, BookmarkFolder } from '../types';
@@ -172,10 +171,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn transition-all duration-300">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-white/20 flex flex-col transition-colors duration-500">
-        <div className="sticky top-0 flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-10 transition-colors duration-500">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+    // Mobile: p-0 (Full screen), Desktop: p-4
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn transition-all duration-300">
+      {/* Mobile: h-full, rounded-none. Desktop: h-auto, rounded-3xl */}
+      <div className="bg-white dark:bg-slate-900 w-full max-w-3xl h-full md:h-auto rounded-none md:rounded-3xl shadow-2xl max-h-[100dvh] md:max-h-[90vh] overflow-hidden flex flex-col transition-colors duration-500 border-0 md:border border-white/20">
+        {/* Header */}
+        <div className="sticky top-0 flex items-center justify-between p-4 md:p-6 border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md z-10 transition-colors duration-500">
+          <h2 className="text-lg md:text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
             <Palette size={20} className={`text-${settings.themeColor}-500`} />
             个性化
           </h2>
@@ -184,12 +186,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-8 flex-1">
+        {/* Scrollable Content */}
+        <div className="p-4 md:p-6 space-y-6 md:space-y-8 flex-1 overflow-y-auto custom-scrollbar">
           
           {/* Theme & Color */}
           <section>
-             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">主题与外观</h3>
-             <div className="space-y-5 bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
+             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 md:mb-4 px-1">主题与外观</h3>
+             <div className="space-y-5 bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
                 
                 {/* Dark Mode Toggle */}
                 <div>
@@ -197,13 +200,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <div className="flex bg-white dark:bg-slate-900 p-1 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors duration-500">
                         {[
                             { id: 'light', icon: Sun, title: '浅色' },
-                            { id: 'system', icon: Monitor, title: '跟随系统' },
+                            { id: 'system', icon: Monitor, title: '自动' }, // Mobile friendly text
                             { id: 'dark', icon: Moon, title: '深色' },
                         ].map((mode) => (
                             <button
                                 key={mode.id}
                                 onClick={() => onUpdateSettings({...settings, themeMode: mode.id as any})}
-                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                                className={`flex-1 flex items-center justify-center gap-2 py-2 px-2 md:px-3 rounded-lg text-xs md:text-sm font-medium transition-all duration-300 ${
                                     settings.themeMode === mode.id 
                                     ? `bg-${settings.themeColor}-500 text-white shadow-md` 
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'
@@ -225,7 +228,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 key={color.id}
                                 onClick={() => onUpdateSettings({...settings, themeColor: color.id as any})}
                                 className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${color.color} ${
-                                    settings.themeColor === color.id ? 'ring-2 ring-offset-2 ring-gray-300 dark:ring-gray-600 scale-110' : 'hover:scale-105'
+                                    settings.themeColor === color.id ? 'ring-2 ring-offset-2 ring-gray-300 dark:ring-gray-600 scale-110' : 'active:scale-95'
                                 }`}
                                 title={color.name}
                             >
@@ -240,9 +243,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Wallpaper & Background */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">背景壁纸</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 md:mb-4 px-1">背景壁纸</h3>
             
-            <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
+            <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
               
               {/* Wallpaper Mode Tabs */}
               <div className="flex p-1 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-gray-700 mb-6">
@@ -255,7 +258,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     }`}
                  >
                      <ImageIcon size={16} />
-                     本地图片
+                     本地
                  </button>
                  <button
                     onClick={() => onUpdateSettings({...settings, wallpaperMode: 'api'})}
@@ -266,7 +269,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     }`}
                  >
                      <Globe size={16} />
-                     随机壁纸 API
+                     API
                  </button>
               </div>
 
@@ -303,7 +306,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                          />
                       </div>
                       <p className="text-xs text-center text-gray-400">
-                          建议尺寸: 1920x1080 或更高。图片将保存在本地浏览器中。
+                          建议尺寸: 1920x1080。图片保存在本地。
                       </p>
                   </div>
               ) : (
@@ -314,7 +317,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             type="text" 
                             value={newApiUrl}
                             onChange={(e) => setNewApiUrl(e.target.value)}
-                            placeholder="输入随机图片 API (http://...)"
+                            placeholder="输入 API (http://...)"
                             className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200"
                           />
                           <button 
@@ -342,7 +345,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                     onClick={() => onUpdateSettings({...settings, activeWallpaperApi: api})}
                                   >
                                       <div className={`
-                                        w-4 h-4 rounded-full border flex items-center justify-center
+                                        w-4 h-4 shrink-0 rounded-full border flex items-center justify-center
                                         ${settings.activeWallpaperApi === api ? `border-${settings.themeColor}-500` : 'border-gray-400'}
                                       `}>
                                           {settings.activeWallpaperApi === api && (
@@ -354,7 +357,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                   
                                   <button 
                                     onClick={() => handleDeleteApi(api)}
-                                    className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                                     title="删除"
                                   >
                                       <Trash2 size={14} />
@@ -366,7 +369,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               )}
 
               {/* Overlay & Blur Sliders */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div>
                     <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                         <span>背景模糊</span>
@@ -378,7 +381,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         max="20" 
                         value={settings.backgroundBlur}
                         onChange={(e) => onUpdateSettings({...settings, backgroundBlur: parseInt(e.target.value)})}
-                        className={`w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-${settings.themeColor}-400`}
+                        className={`w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-${settings.themeColor}-400 touch-none`}
                     />
                   </div>
                   <div>
@@ -393,7 +396,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         step="0.1"
                         value={settings.backgroundOverlay}
                         onChange={(e) => onUpdateSettings({...settings, backgroundOverlay: parseFloat(e.target.value)})}
-                        className={`w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-${settings.themeColor}-400`}
+                        className={`w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-${settings.themeColor}-400 touch-none`}
                     />
                   </div>
               </div>
@@ -402,8 +405,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           
           {/* Card Style & Icon Shape */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">界面风格</h3>
-            <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 md:mb-4 px-1">界面风格</h3>
+            <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Card Style */}
                     <div>
@@ -413,7 +416,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 <button
                                     key={mode}
                                     onClick={() => onUpdateSettings({...settings, cardStyle: mode})}
-                                    className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-medium transition-all duration-300 ${
+                                    className={`flex-1 py-2 md:py-1.5 px-3 rounded-lg text-xs font-medium transition-all duration-300 ${
                                         settings.cardStyle === mode 
                                         ? `bg-${settings.themeColor}-400 text-white shadow-sm` 
                                         : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'
@@ -437,7 +440,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 <button 
                                     key={shape.id}
                                     onClick={() => onUpdateSettings({...settings, iconShape: shape.id as any})}
-                                    className={`flex-1 flex justify-center items-center py-1.5 rounded-xl border transition-all duration-300 ${
+                                    className={`flex-1 flex justify-center items-center py-2 md:py-1.5 rounded-xl border transition-all duration-300 ${
                                         settings.iconShape === shape.id 
                                         ? `border-${settings.themeColor}-400 bg-${settings.themeColor}-50 dark:bg-${settings.themeColor}-900/20 text-${settings.themeColor}-500` 
                                         : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 hover:border-gray-300'
@@ -461,8 +464,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Bulk Add */}
           <section>
-             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">批量添加</h3>
-             <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
+             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 md:mb-4 px-1">批量添加</h3>
+             <div className="bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5 border border-gray-100 dark:border-gray-800/50 transition-colors duration-500">
                  <div className="space-y-4">
                      <div>
                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">目标分类名称</label>
@@ -493,7 +496,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                      <button 
                         onClick={handleBulkSubmit}
-                        className={`w-full py-2.5 bg-${settings.themeColor}-500 hover:bg-${settings.themeColor}-600 text-white rounded-xl font-medium shadow-md shadow-${settings.themeColor}-500/20 transition-all active:scale-95 flex items-center justify-center gap-2`}
+                        className={`w-full py-3 md:py-2.5 bg-${settings.themeColor}-500 hover:bg-${settings.themeColor}-600 text-white rounded-xl font-medium shadow-md shadow-${settings.themeColor}-500/20 transition-all active:scale-95 flex items-center justify-center gap-2`}
                      >
                          <FileText size={18} />
                          解析并添加
@@ -506,7 +509,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Data Management */}
           <section>
-             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 pl-1">数据备份</h3>
+             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3 md:mb-4 pl-1">数据备份</h3>
              
              <div className="flex flex-col sm:flex-row gap-4">
                  <button 
@@ -532,7 +535,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                      导出 HTML
                  </button>
              </div>
-             <p className="text-center text-xs text-gray-400 mt-3">
+             <p className="text-center text-xs text-gray-400 mt-3 pb-6 md:pb-0">
                  支持标准 Netscape 书签格式 (Chrome, Safari, Edge 等)
              </p>
           </section>
