@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>ZenNav - 极简导航</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +20,20 @@
       }
     </script>
     <style>
-      body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+      html {
+          /* 
+            禁止浏览器默认的“橡皮筋”回弹效果
+            这通常会让用户误以为页面背景在移动
+          */
+          overscroll-behavior: none;
+      }
+      body { 
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+          /* 确保页面至少占满一屏，防止滚动时出现空白区域 */
+          min-height: 100vh;
+          min-height: 100dvh; 
+      }
+      
       /* Custom Scrollbar */
       ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: transparent; }
@@ -38,7 +52,7 @@
         transition: none !important;
       }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
@@ -50,7 +64,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-gray-50 dark:bg-[#0a0a0a] transition-colors duration-500">
     <div id="root"></div>

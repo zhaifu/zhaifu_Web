@@ -306,10 +306,6 @@ function App() {
   // Determine background image
   const backgroundUrl = useMemo(() => {
       if (settings.wallpaperMode === 'api' && settings.activeWallpaperApi) {
-          // Add timestamp to force cache refresh only when API changes, 
-          // but we want it to persist during session unless explicitly refreshed.
-          // For now, simple direct URL works, browser might cache for a session.
-          // To ensure it works for redirecting APIs, we use the raw URL.
           return settings.activeWallpaperApi;
       }
       return settings.backgroundImage;
@@ -317,19 +313,23 @@ function App() {
 
   return (
     <div className="min-h-screen w-full relative transition-colors duration-500 ease-in-out text-slate-800 dark:text-slate-100 font-sans bg-gray-50 dark:bg-black">
-      {/* Background Layer - Optimized for smooth transitions */}
+      {/* Background Layer - Optimized for mobile scrolling */}
+      {/* Uses 'fixed' with 100lvh (Largest Viewport Height) to prevent resizing/jumping when mobile address bar collapses */}
       <div 
-        className="fixed inset-0 z-0 transition-colors duration-700 bg-gray-100 dark:bg-[#050505]"
+        className="fixed top-0 left-0 w-full h-screen z-0 transition-colors duration-700 bg-gray-100 dark:bg-[#050505]"
+        style={{ height: '100lvh' }}
       >
-        {/* We use a pseudo-element or simple absolute div for the image to allow better CSS transitions than applying style directly to a parent that holds content */}
+        {/* Background Image Container */}
         <div 
              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 ease-in-out"
              style={{ 
                 backgroundImage: `url(${backgroundUrl})`,
                 filter: `blur(${settings.backgroundBlur}px)`,
-                transform: 'scale(1.02)', // Prevent blur edges
+                // Use translateZ(0) to force hardware acceleration and reduce jitter on scroll
+                transform: 'scale(1.02) translateZ(0)', 
              }}
         />
+        {/* Overlay */}
         <div 
             className="absolute inset-0 bg-black/5 dark:bg-black/30 transition-colors duration-700 ease-in-out"
             style={{ opacity: Math.max(settings.backgroundOverlay, 0.1) }}
@@ -421,7 +421,6 @@ function App() {
                                                 : 'text-gray-400 hover:text-gray-200'}
                                         `}
                                     >
-                                        {/* Removed Icon and white bg logic entirely */}
                                         {engine.name}
                                     </button>
                                 ))}
