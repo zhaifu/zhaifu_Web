@@ -431,13 +431,14 @@ function App() {
                     </div>
 
                     <input
-                        type="text"
-                        className="block w-full pl-32 pr-12 py-4 bg-white/15 dark:bg-black/20 border border-white/20 backdrop-blur-md rounded-full leading-5 text-white placeholder-white/60 focus:outline-none focus:border-white/40 focus:bg-white/25 focus:ring-0 transition-all duration-300 shadow-lg shadow-black/5"
-                        placeholder={`Search with ${currentEngine.name}...`}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyDown={handleSearch}
+                    type="text"
+                    className="block w-full pl-[6rem] pr-12 py-4 bg-white/15 dark:bg-black/20 border border-white/20 backdrop-blur-md rounded-full leading-5 text-white placeholder-white/60 focus:outline-none focus:border-white/40 focus:bg-white/25 focus:ring-0 transition-all duration-300 shadow-lg shadow-black/5"
+                    placeholder={`Search with ${currentEngine.name}...`}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearch}
                     />
+
 
                     <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
                          {searchQuery ? (
