@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Settings, Search, FolderOpen, ChevronDown, Menu, Plus } from 'lucide-react';
+import { Settings, Search, FolderOpen, ChevronDown, Menu, Plus, X } from 'lucide-react';
 import { BookmarkFolder, BookmarkNode, isFolder, AppSettings, BookmarkLink } from './types';
 import { SettingsModal } from './components/SettingsModal';
 import { BookmarkCard } from './components/BookmarkCard';
@@ -285,6 +285,8 @@ function App() {
         const engine = SEARCH_ENGINES[settings.searchEngine] || SEARCH_ENGINES.bing;
         window.open(engine.url + encodeURIComponent(searchQuery), '_blank');
       }
+      // Clear search query so bookmarks reappear
+      setSearchQuery('');
     }
   };
 
@@ -437,8 +439,18 @@ function App() {
                         onKeyDown={handleSearch}
                     />
 
-                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                         <Search className="h-5 w-5 text-white/60 group-focus-within:text-white transition-colors" />
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                         {searchQuery ? (
+                            <button 
+                                onClick={() => setSearchQuery('')}
+                                className="p-1 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                                title="清除搜索"
+                            >
+                                <X size={18} />
+                            </button>
+                         ) : (
+                            <Search className="h-5 w-5 text-white/60 group-focus-within:text-white transition-colors pointer-events-none" />
+                         )}
                     </div>
                 </div>
             )}
