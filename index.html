@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZenNav - 极简导航</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            transitionProperty: {
+              'colors': 'background-color, border-color, color, fill, stroke',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.8); }
+
+      /* Smooth Theme Transition for key properties */
+      body, div, button, a, input, span, h1, h2, h3, h4, h5, h6 {
+        transition-property: background-color, border-color, color;
+        transition-duration: 300ms;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      /* Exclude transitions for transform/opacity unless explicitly set, to perform better */
+      .no-transition {
+        transition: none !important;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-50 dark:bg-[#0a0a0a] transition-colors duration-500">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
