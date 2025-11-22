@@ -40,23 +40,11 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, settings, 
     onDelete?.(bookmark.id);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    // 先打开广告链接
-    const adUrl = 'https://www.google.com/adsense/start/?utm_source=internal&utm_medium=link&utm_campaign=homepage';
-    window.open(adUrl, '_blank');
-    // 延迟后跳转到目标链接
-    setTimeout(() => {
-      window.open(bookmark.url, '_blank');
-    }, 1000);
-  };
-
   return (
     <a 
       href={bookmark.url}
       target="_blank" 
       rel="noopener noreferrer"
-      onClick={handleClick}
       // Mobile: p-2.5, Desktop: p-3
       className={`group relative flex items-center p-2.5 md:p-3 transition-all duration-300 ease-out ${cardBgClass} ${settings.iconShape === 'rounded' ? 'rounded-lg md:rounded-xl' : settings.iconShape === 'circle' ? 'rounded-xl md:rounded-2xl' : 'rounded-md md:rounded-sm'}`}
     >
