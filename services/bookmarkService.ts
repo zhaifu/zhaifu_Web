@@ -20,8 +20,11 @@ export const parseNetscapeBookmarks = (htmlContent: string): BookmarkFolder[] =>
         if (h3) {
           const nextSibling = item.nextElementSibling;
           let childNodes: BookmarkNode[] = [];
-          // Often the DL is inside the next DD, or directly follows
-          if (nextSibling && nextSibling.tagName === 'DD') {
+          // Check if DL is directly next to DT (common structure)
+          if (nextSibling && nextSibling.tagName === 'DL') {
+            childNodes = traverse(nextSibling);
+          } else if (nextSibling && nextSibling.tagName === 'DD') {
+            // DL might be inside the next DD
             const innerDl = nextSibling.querySelector('dl');
             if (innerDl) {
               childNodes = traverse(innerDl);

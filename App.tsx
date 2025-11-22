@@ -7,6 +7,7 @@ import { BookmarkCard } from './components/BookmarkCard';
 import { Sidebar } from './components/Sidebar';
 import { AddBookmarkModal } from './components/AddBookmarkModal';
 import { generateId, SEARCH_ENGINES, THEME_PRESETS, DEFAULT_WALLPAPER_APIS } from './utils';
+import { parseNetscapeBookmarks } from './services/bookmarkService';
 
 // Default to "Sakura" (index 0)
 const DEFAULT_SETTINGS: AppSettings = {
@@ -76,12 +77,58 @@ function App() {
       } catch (e) { console.error("Failed to parse settings", e); }
     }
     
+    // Helper function to load bookmarks from bookmarks.html
+    const loadBookmarksFromFile = () => {
+      return fetch('/bookmarks.html')
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error('Failed to fetch bookmarks.html');
+        })
+        .then(htmlContent => {
+          const parsed = parseNetscapeBookmarks(htmlContent);
+          if (parsed.length > 0) {
+            setBookmarks(parsed);
+            console.log('Loaded bookmarks from bookmarks.html:', parsed.length, 'folders');
+          } else {
+            console.warn('Parsed bookmarks.html but got empty result, using default');
+            setBookmarks(DEFAULT_BOOKMARKS);
+          }
+        })
+        .catch(error => {
+          console.warn("Failed to load bookmarks.html, using default bookmarks:", error);
+          setBookmarks(DEFAULT_BOOKMARKS);
+        });
+    };
+    
     if (savedBookmarks) {
       try {
-         setBookmarks(JSON.parse(savedBookmarks));
-      } catch (e) { console.error("Failed to parse bookmarks", e); }
+         const parsed = JSON.parse(savedBookmarks);
+         // Check if it's the default bookmarks (only 2 folders with default titles)
+         const isDefault = parsed.length === 2 && 
+                          parsed[0]?.title === '常用推荐' && 
+                          parsed[1]?.title === '生活方式' &&
+                          parsed[0]?.children?.length === 3 &&
+                          parsed[1]?.children?.length === 3;
+         
+         if (isDefault) {
+           // If it's default, load from bookmarks.html instead
+           console.log('Detected default bookmarks, loading from bookmarks.html');
+           loadBookmarksFromFile().then(() => setIsMounted(true));
+         } else {
+           setBookmarks(parsed);
+           setIsMounted(true);
+         }
+      } catch (e) { 
+        console.error("Failed to parse bookmarks", e);
+        // If parsing fails, try to load from bookmarks.html
+        loadBookmarksFromFile().then(() => setIsMounted(true));
+      }
+    } else {
+      // If no saved bookmarks, try to load from bookmarks.html
+      loadBookmarksFromFile().then(() => setIsMounted(true));
     }
-    setIsMounted(true);
   }, []);
 
   // Save to LocalStorage on change
